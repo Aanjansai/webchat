@@ -1,0 +1,74 @@
+<!-- chat/templates/chat/room.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>BridgeLabz Chat Room</title>
+</head>
+
+<style type="text/css">
+body {background-image:url('https://i.imgur.com/IQ8dT.jpg');}
+
+    textarea {
+    display: left;
+    margin-left: left;
+
+    margin-right: right;
+}
+
+input {
+    display: left;
+    margin-left: left;
+    margin-right: right;
+}
+
+
+</style>
+
+<center><span style="color:green; font-size:37px;">GOOGLE</span><span style="color:red; font-size:37px; margin-left:21px;">CLOUD</span><span style="color:blue; font-size:37px; margin-left:21px;" >PLATFORM</span></center>
+<p></p>
+<body>
+    <center><textarea style="height: 219px; width: 503px;" id="chat-log" cols="35" rows="13" wrap="hard" disabled="yes"></textarea><br/>
+    <input style="width: 507px; height: 20px;" id="chat-message-input" type="text" size="35" placeholder="Text your message"/><br/>
+    <br>
+        <input id="chat-message-submit" type="button" title="click on Send" value="Send"/></center>
+        <!--<a href="/chatapplication/page/templates/page/home.html"><input type="button" value="logout" title="logout"></a>-->
+    <!--<input id="chat-message-cancel" type="button" title="click on Send" value="Cancel"/>-->
+</body>
+
+<script>
+    var roomName = {{ room_name_json }};
+
+    var chatSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/chat/' + roomName + '/');
+
+    chatSocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var message = data['message'];
+        document.querySelector('#chat-log').value += (message + '\n');
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        var messageInputDom = document.querySelector('#chat-message-input');
+        var message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+
+        messageInputDom.value = '';
+    };
+</script>
+</html>

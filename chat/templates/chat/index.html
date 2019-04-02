@@ -1,0 +1,32 @@
+<!-- chat/templates/chat/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat Rooms</title>
+</head>
+<style>
+    body { background-image:url('https://i.imgur.com/IQ8dT.jpg');}
+</style>
+<center>
+<center><span style="color:green; font-size:37px; ">GOOGLE</span><span style="color:red;  font-size:37px; margin-left:21px;">CLOUD</span><span style="color:blue;  font-size:37px; margin-left:21px; " >PLATFORM</span></center>
+    <h2 style="color:black">Hello user!!!</h2>
+    <h3 style="color:black">What chat room would you like to enter?</h3>
+    <input style="height: 22px" id="room-name-input" type="text" placeholder="enter the room name" size="60"/><br/><br/>
+    <input id="room-name-submit" type="button" title="click on Enter" value="Enter"/></center>
+
+    <script>
+        document.querySelector('#room-name-input').focus();
+        document.querySelector('#room-name-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#room-name-submit').click();
+            }
+        };
+
+        document.querySelector('#room-name-submit').onclick = function(e) {
+            var roomName = document.querySelector('#room-name-input').value;
+            window.location.pathname = '/chat/' + roomName + '/';
+        };
+    </script>
+</body>
+</html>
